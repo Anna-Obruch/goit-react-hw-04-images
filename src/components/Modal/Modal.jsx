@@ -1,41 +1,40 @@
-import { Component } from 'react';
+import {  useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Overlay, ModalContent } from './Modal.module';
 
-export class Modal extends Component {
+export const Modal = (largeImageURL, alt, onCloseModal ) => {
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeydown);
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      if (e.code === 'Escape') {
+        onCloseModal();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeydown);
+  
+  return() => {
+    window.removeEventListener('keydown', handleKeydown);
   }
+}, [onCloseModal]);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeydown);
-  }
 
-  handleKeydown = e => {
-    if (e.code === 'Escape') {
-      this.props.onCloseModal();
-    }
-  };
-
-  handleBackdropClick = ({ target, currentTarget }) => {
+ const handleBackdropClick = ({ target, currentTarget }) => {
     if (currentTarget === target) {
-      this.props.onCloseModal();
+      onCloseModal();
     }
   };
 
-  render() {
-    const { largeImageURL, alt } = this.props;
 
     return (
-      <Overlay className="overlay" onClick={this.handleBackdropClick}>
+      <Overlay className="overlay" onClick={handleBackdropClick}>
         <ModalContent className="modal">
           <img src={largeImageURL} alt={alt} />
         </ModalContent>
       </Overlay>
     );
   }
-}
+
 Modal.propTypes = {
   largeImageURL: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
