@@ -2,7 +2,7 @@ import {  useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Overlay, ModalContent } from './Modal.module';
 
-export const Modal = (largeImageURL, alt, onCloseModal ) => {
+export const Modal = ({largeImageURL, alt, onCloseModal} ) => {
 
   useEffect(() => {
     const handleKeydown = (e) => {
@@ -10,13 +10,13 @@ export const Modal = (largeImageURL, alt, onCloseModal ) => {
         onCloseModal();
       }
     };
-
-    window.addEventListener('keydown', handleKeydown);
   
-  return() => {
-    window.removeEventListener('keydown', handleKeydown);
-  }
-}, [onCloseModal]);
+    window.addEventListener('keydown', handleKeydown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+    }
+  }, [onCloseModal]);
 
 
  const handleBackdropClick = ({ target, currentTarget }) => {
